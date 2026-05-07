@@ -32,6 +32,15 @@ Consumers in mid-sized US markets typically shop at 1–2 grocery stores out of 
 
 A single Rosie scraper covers both County Market and Harvest Market, and is reusable for future regional expansion.
 
+Aldi's online curbside pickup prices are confirmed to match in-store shelf prices, so the aldi.us catalog is a faithful pricing source.
+
+## Tech Stack
+
+- **Frontend:** Next.js (PWA, deployed to Vercel or equivalent)
+- **Database:** Postgres (managed; e.g., Neon, Supabase, or RDS)
+- **Scraping / ingest:** standalone worker service running on a daily cron, writing into Postgres
+- **Catalog seed dataset:** [Open Food Facts](https://world.openfoodfacts.org/) — open, UPC-keyed, brand- and category-tagged. Licensed under ODbL (data) / CC-BY-SA (images); attribution required. Used to bootstrap the canonical product graph for branded items. Generic concepts and store-brand equivalences hand-curated on top.
+
 ## Data Pipeline
 
 - **Refresh cadence:** every 24 hours, all stores, full catalog
@@ -98,12 +107,17 @@ Native wrapper (Capacitor or React Native) deferred until product is validated a
 - Receipt scanning / crowdsourced prices
 - Markets outside Springfield, IL
 
+## Business Model
+
+- **Affiliate links: explicitly excluded.** No Instacart or third-party referral monetization in MVP — keeps the "best price" recommendation free of commercial bias.
+- Remaining options for post-launch: unobtrusive display ads, a freemium tier (e.g., paid for multi-list / household sharing / price-drop alerts), or sponsored placements clearly labeled as such.
+- MVP ships ad-free; monetization decision deferred until product-market fit is validated.
+
 ## Open Questions / Risks
 
-- **Aldi pickup price parity:** confirm aldi.us pickup prices match in-store shelf prices for a Springfield store before committing the scraper
 - **Scraping ToS exposure:** review each chain's terms of service; budget for resilience to anti-bot measures
-- **Canonical taxonomy bootstrapping:** building the generic-product graph (and the store-brand equivalence layer) is the largest upfront content effort
-- **Business model:** undecided (ad-supported, affiliate, or freemium) — does not block MVP build but should be settled before launch
+- **Store-brand equivalence layer:** the largest upfront content effort — Open Food Facts covers branded products well but not store brands, so a hand-curated equivalence table is needed
+- **Generic-concept taxonomy:** ~500 common items (milk, eggs, bread, produce by variety) need canonical definitions; not in OFF, must be authored
 
 ## Success Criteria for MVP
 
