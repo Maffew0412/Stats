@@ -1,0 +1,107 @@
+[
+  {
+    "tcin": "13282899",
+    "item": {
+      "product_description": {
+        "title": "2% Reduced Fat Milk - 1gal - Good & Gather™"
+      },
+      "primary_brand": {
+        "name": "Good & Gather"
+      },
+      "enrichment": {
+        "images": {
+          "primary_image_url": "https://target.scene7.com/is/image/Target/GUEST_good-gather-2pct-1gal"
+        }
+      }
+    },
+    "price": {
+      "current_retail": 3.49,
+      "reg_retail": 3.49,
+      "formatted_current_price": "$3.49"
+    }
+  },
+  {
+    "tcin": "14911434",
+    "item": {
+      "product_description": {
+        "title": "Horizon Organic 2% Reduced Fat Milk - 1gal"
+      },
+      "primary_brand": {
+        "name": "Horizon Organic"
+      },
+      "enrichment": {
+        "images": {
+          "primary_image_url": "https://target.scene7.com/is/image/Target/GUEST_horizon-organic-2pct"
+        }
+      }
+    },
+    "price": {
+      "current_retail": 6.99,
+      "reg_retail": 7.49,
+      "formatted_current_price": "$6.99"
+    }
+  },
+  {
+    "tcin": "12953789",
+    "item": {
+      "product_description": {
+        "title": "Lactaid 2% Reduced Fat Milk - 96 fl oz"
+      },
+      "primary_brand": {
+        "name": "Lactaid"
+      },
+      "enrichment": {
+        "images": {
+          "primary_image_url": "https://target.scene7.com/is/image/Target/GUEST_lactaid-2pct-96oz"
+        }
+      }
+    },
+    "price": {
+      "current_retail": 5.79,
+      "reg_retail": 5.79,
+      "formatted_current_price": "$5.79"
+    }
+  },
+  {
+    "tcin": "15067112",
+    "item": {
+      "product_description": {
+        "title": "Fairlife 2% Reduced Fat Ultra-Filtered Milk - 52 fl oz"
+      },
+      "primary_brand": {
+        "name": "Fairlife"
+      },
+      "enrichment": {
+        "images": {
+          "primary_image_url": "https://target.scene7.com/is/image/Target/GUEST_fairlife-2pct-52oz"
+        }
+      }
+    },
+    "price": {
+      "current_retail": 4.49,
+      "reg_retail": 4.99,
+      "formatted_current_price": "$4.49"
+    }
+  },
+  {
+    "tcin": "13088421",
+    "item": {
+      "product_description": {
+        "title": "Borden 2% Reduced Fat Milk - 1gal"
+      },
+      "primary_brand": {
+        "name": "Borden"
+      },
+      "enrichment": {
+        "images": {
+          "primary_image_url": "https://target.scene7.com/is/image/Target/GUEST_borden-2pct-1gal"
+        }
+      }
+    },
+    "price": {
+      "current_retail": 3.89,
+      "reg_retail": 3.89,
+      "formatted_current_price": "$3.89"
+    }
+  }
+]

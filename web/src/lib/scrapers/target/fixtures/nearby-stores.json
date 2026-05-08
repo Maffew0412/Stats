@@ -1,0 +1,30 @@
+[
+  {
+    "store_id": "1424",
+    "location_name": "Springfield",
+    "mailing_address": {
+      "address_line1": "2125 Wabash Ave",
+      "city": "Springfield",
+      "state": "IL",
+      "postal_code": "62704"
+    },
+    "geographic_specifications": {
+      "latitude": 39.7689,
+      "longitude": -89.6859
+    }
+  },
+  {
+    "store_id": "2503",
+    "location_name": "Champaign",
+    "mailing_address": {
+      "address_line1": "2102 N Prospect Ave",
+      "city": "Champaign",
+      "state": "IL",
+      "postal_code": "61822"
+    },
+    "geographic_specifications": {
+      "latitude": 40.1406,
+      "longitude": -88.2434
+    }
+  }
+]
