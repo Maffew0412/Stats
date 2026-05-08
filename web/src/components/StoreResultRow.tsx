@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import type { StoreComparison } from '@/lib/compare/types';
 import { formatMoney, formatSaleEnds, formatSize } from '@/lib/format';
@@ -116,6 +117,16 @@ export function StoreResultRow({ store, isWinner }: Props) {
               </li>
             ))}
           </ul>
+          {hasMatches && (
+            <div className="mt-3 flex justify-end">
+              <Link
+                href={`/shop/${store.chainSlug}`}
+                className="inline-flex items-center gap-1 rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
+              >
+                Shop at {store.chainName} →
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </li>

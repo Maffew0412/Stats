@@ -10,6 +10,8 @@ export interface CompareRequestItem {
   rawQuery: string;
   displayName: string;
   quantity: number;
+  /** Department slug, mirrored from the user's list item; used by Shopping Mode for grouping. */
+  departmentSlug?: string;
 }
 
 export interface CompareRequest {
@@ -47,6 +49,8 @@ export interface CompareItemResult {
   chosenProduct: ChosenProduct | null;
   /** Line total in cents (unitPriceCents * quantity), 0 when unavailable. */
   lineTotalCents: number;
+  /** Echoed from the request item; used by Shopping Mode for grouping. */
+  departmentSlug?: string;
 }
 
 export interface StoreComparison {

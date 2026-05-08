@@ -262,6 +262,7 @@ function evaluateItem(
       status: 'unavailable',
       chosenProduct: null,
       lineTotalCents: 0,
+      departmentSlug: item.departmentSlug,
     };
   }
 
@@ -287,6 +288,7 @@ function evaluateItem(
     status: 'matched',
     chosenProduct,
     lineTotalCents: unitPriceCents * item.quantity,
+    departmentSlug: item.departmentSlug,
   };
 }
 

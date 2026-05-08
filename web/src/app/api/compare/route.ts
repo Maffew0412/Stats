@@ -54,6 +54,7 @@ function parseRequest(body: unknown): CompareRequest | { error: string } {
       rawQuery: typeof r.rawQuery === 'string' ? r.rawQuery : '',
       displayName: typeof r.displayName === 'string' ? r.displayName : '',
       quantity,
+      departmentSlug: typeof r.departmentSlug === 'string' ? r.departmentSlug : undefined,
     });
   }
 

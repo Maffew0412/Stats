@@ -44,6 +44,7 @@ export function CompareView() {
           rawQuery: it.rawQuery,
           displayName: it.displayName,
           quantity: it.quantity,
+          departmentSlug: it.departmentSlug,
         })),
         selectedChainSlugs,
         zip,
@@ -148,6 +149,12 @@ function WinnerCard({ data }: { data: CompareResponse }) {
           </>
         )}
       </p>
+      <Link
+        href={`/shop/${winner.chainSlug}`}
+        className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-6 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400"
+      >
+        Shop at {winner.chainName}
+      </Link>
     </div>
   );
 }
