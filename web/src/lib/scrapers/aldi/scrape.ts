@@ -1,13 +1,10 @@
 /**
- * Target scraper.
+ * Aldi scraper.
  *
- * Live mode: locates the nearest Springfield Target via RedSky, then for each
- * seeded generic concept runs a Target search using the concept's primary
- * search term, taking the top N results and tagging them with that concept.
+ * Live mode: locates the nearest Aldi pickup store, then for each seeded
+ * generic concept runs a search and tags top results with that concept.
  *
- * Dry-run mode: loads representative captured/synthetic JSON from ./fixtures
- * and runs the same normalization + tagging pipeline. The two modes diverge
- * only at the I/O boundary; everything downstream is identical.
+ * Dry-run mode: loads representative captured/synthetic JSON from ./fixtures.
  */
 
 import { readFile } from 'node:fs/promises';
@@ -22,20 +19,21 @@ import type { NormalizedProduct, NormalizedStore, ScraperContext } from '../type
 import {
   fetchNearbyStores,
   fetchSearch,
-  type RawNearbyStore,
-  type RawSearchItem,
+  type RawAldiProduct,
+  type RawAldiStore,
 } from './api';
 import { normalizeProduct, normalizeStore } from './normalize';
 
 const FIXTURES_DIR = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
 const RESULTS_PER_CONCEPT = 5;
 
-const targetRunner: ScraperRunner = {
-  key: 'target',
+const aldiRunner: ScraperRunner = {
+  key: 'aldi',
+  delayMs: 400, // Be a touch politer; Aldi's storefront is more sensitive.
 
   async locateStore(ctx: ScraperContext): Promise<NormalizedStore | null> {
     const raw = ctx.dryRun
-      ? await loadFixture<RawNearbyStore[]>('nearby-stores.json')
+      ? await loadFixture<RawAldiStore[]>('nearby-stores.json')
       : await fetchNearbyStores(ctx.zip, 5);
     for (const candidate of raw) {
       const normalized = normalizeStore(candidate);
@@ -51,7 +49,7 @@ const targetRunner: ScraperRunner = {
   ): Promise<NormalizedProduct[]> {
     const term = concept.searchTerms[0];
     const items = ctx.dryRun
-      ? await loadFixture<RawSearchItem[]>('search.json')
+      ? await loadFixture<RawAldiProduct[]>('search.json')
       : await fetchSearch(term, store.externalId, RESULTS_PER_CONCEPT);
 
     const out: NormalizedProduct[] = [];
@@ -66,7 +64,7 @@ const targetRunner: ScraperRunner = {
   },
 };
 
-export const targetScraper = buildScraper(targetRunner);
+export const aldiScraper = buildScraper(aldiRunner);
 
 async function loadFixture<T>(filename: string): Promise<T> {
   const raw = await readFile(join(FIXTURES_DIR, filename), 'utf8');

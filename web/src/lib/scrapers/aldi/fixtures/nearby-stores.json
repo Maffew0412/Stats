@@ -1,0 +1,30 @@
+[
+  {
+    "storeId": "47-013",
+    "name": "Springfield",
+    "address": {
+      "line1": "2300 Stevenson Dr",
+      "city": "Springfield",
+      "state": "IL",
+      "postalCode": "62703"
+    },
+    "geo": {
+      "latitude": 39.7589,
+      "longitude": -89.6324
+    }
+  },
+  {
+    "storeId": "47-027",
+    "name": "Decatur",
+    "address": {
+      "line1": "1240 W Pershing Rd",
+      "city": "Decatur",
+      "state": "IL",
+      "postalCode": "62526"
+    },
+    "geo": {
+      "latitude": 39.8517,
+      "longitude": -88.9648
+    }
+  }
+]

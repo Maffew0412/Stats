@@ -1,0 +1,62 @@
+[
+  {
+    "sku": "4099100061826",
+    "name": "Friendly Farms 2% Reduced Fat Milk",
+    "brand": "Friendly Farms",
+    "imageUrl": "https://shop.aldi.us/images/friendly-farms-2pct-1gal.png",
+    "price": {
+      "value": 2.79,
+      "currencyCode": "USD"
+    },
+    "size": {
+      "value": "1",
+      "unit": "gal"
+    },
+    "category": "Dairy"
+  },
+  {
+    "sku": "4099100061833",
+    "name": "Friendly Farms 2% Reduced Fat Milk",
+    "brand": "Friendly Farms",
+    "imageUrl": "https://shop.aldi.us/images/friendly-farms-2pct-half-gal.png",
+    "price": {
+      "value": 1.69,
+      "currencyCode": "USD"
+    },
+    "size": {
+      "value": "0.5",
+      "unit": "gal"
+    },
+    "category": "Dairy"
+  },
+  {
+    "sku": "4099100132113",
+    "name": "Simply Nature Organic 2% Reduced Fat Milk",
+    "brand": "Simply Nature",
+    "imageUrl": "https://shop.aldi.us/images/simply-nature-organic-2pct.png",
+    "price": {
+      "value": 4.39,
+      "currencyCode": "USD"
+    },
+    "size": {
+      "value": "0.5",
+      "unit": "gal"
+    },
+    "category": "Dairy"
+  },
+  {
+    "sku": "4099100208900",
+    "name": "Friendly Farms Lactose-Free 2% Reduced Fat Milk",
+    "brand": "Friendly Farms",
+    "imageUrl": "https://shop.aldi.us/images/friendly-farms-lactose-free-2pct.png",
+    "price": {
+      "value": 4.29,
+      "currencyCode": "USD"
+    },
+    "size": {
+      "value": "96",
+      "unit": "fl oz"
+    },
+    "category": "Dairy"
+  }
+]
