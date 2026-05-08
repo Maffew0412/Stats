@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { AddItemInput } from './AddItemInput';
 import { ListItemRow } from './ListItemRow';
@@ -8,6 +9,7 @@ import type { ListItem } from '@/lib/list/types';
 import type { GenericConceptSeed } from '@/lib/catalog/seeds';
 
 export function ListBuilder() {
+  const router = useRouter();
   const [items, setItems] = useState<ListItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
@@ -109,7 +111,7 @@ export function ListBuilder() {
       <button
         type="button"
         disabled={items.length === 0}
-        onClick={() => alert('Comparison view coming soon — this will pull current prices from each Springfield grocer and pick the cheapest single store.')}
+        onClick={() => router.push('/compare')}
         className="sticky bottom-4 mt-auto w-full rounded-xl bg-zinc-900 px-6 py-4 text-base font-semibold text-white shadow-lg transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
       >
         Compare prices
