@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { loadList } from '@/lib/list/storage';
+import { loadPrefs } from '@/lib/prefs/storage';
 import type { ListItem } from '@/lib/list/types';
 import type { CompareRequest, CompareResponse } from '@/lib/compare/types';
 import { formatMoney } from '@/lib/format';
@@ -16,17 +18,23 @@ type Status =
   | { kind: 'ready'; data: CompareResponse };
 
 export function CompareView() {
+  const router = useRouter();
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
 
   useEffect(() => {
+    const prefs = loadPrefs();
+    if (!prefs?.onboardedAt) {
+      router.replace('/onboarding');
+      return;
+    }
     const items = loadList();
     if (items.length === 0) {
       setStatus({ kind: 'empty' });
       return;
     }
-    void run(items);
+    void run(items, prefs.selectedChainSlugs, prefs.zip);
 
-    async function run(list: ListItem[]) {
+    async function run(list: ListItem[], selectedChainSlugs: string[], zip: string) {
       setStatus({ kind: 'loading' });
       const body: CompareRequest = {
         items: list.map((it) => ({
@@ -37,6 +45,8 @@ export function CompareView() {
           displayName: it.displayName,
           quantity: it.quantity,
         })),
+        selectedChainSlugs,
+        zip,
       };
       try {
         const res = await fetch('/api/compare', {
@@ -55,7 +65,7 @@ export function CompareView() {
         setStatus({ kind: 'error', message });
       }
     }
-  }, []);
+  }, [router]);
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8 sm:py-12">
