@@ -1,0 +1,44 @@
+[
+  {
+    "id": "hm-organic-valley-2pct-half",
+    "name": "Organic Valley Organic 2% Reduced Fat Milk",
+    "brand": "Organic Valley",
+    "imageUrl": "https://shop.goharvestmarket.com/images/organic-valley-2pct-half.jpg",
+    "price": 4.99,
+    "size": "0.5 gal",
+    "category": "Dairy",
+    "upc": "093966200034"
+  },
+  {
+    "id": "hm-kalona-2pct-gal",
+    "name": "Kalona SuperNatural 2% Whole-Cream Top Milk",
+    "brand": "Kalona SuperNatural",
+    "imageUrl": "https://shop.goharvestmarket.com/images/kalona-2pct-gal.jpg",
+    "price": 7.49,
+    "size": "1 gal",
+    "category": "Dairy",
+    "upc": "856558002012"
+  },
+  {
+    "id": "hm-prairie-farms-2pct-gal",
+    "name": "Prairie Farms 2% Reduced Fat Milk",
+    "brand": "Prairie Farms",
+    "imageUrl": "https://shop.goharvestmarket.com/images/prairie-farms-2pct-gal.jpg",
+    "price": 4.49,
+    "salePrice": 3.99,
+    "saleEndsOn": "2026-05-15",
+    "size": "1 gal",
+    "category": "Dairy",
+    "upc": "071041000018"
+  },
+  {
+    "id": "hm-horizon-organic-2pct-half",
+    "name": "Horizon Organic 2% Reduced Fat Milk",
+    "brand": "Horizon Organic",
+    "imageUrl": "https://shop.goharvestmarket.com/images/horizon-organic-2pct-half.jpg",
+    "price": 4.79,
+    "size": "0.5 gal",
+    "category": "Dairy",
+    "upc": "742365000287"
+  }
+]

@@ -1,10 +1,12 @@
 import type { Scraper } from './types';
 import { aldiScraper } from './aldi/scrape';
+import { rosieScraper } from './rosie/scrape';
 import { targetScraper } from './target/scrape';
 
 const SCRAPERS: Record<string, Scraper> = {
   [targetScraper.key]: targetScraper,
   [aldiScraper.key]: aldiScraper,
+  [rosieScraper.key]: rosieScraper,
 };
 
 export function getScraper(key: string): Scraper {

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "cm-prairie-farms-2pct-gal",
+    "name": "Prairie Farms 2% Reduced Fat Milk",
+    "brand": "Prairie Farms",
+    "imageUrl": "https://shop.countymarket.com/images/prairie-farms-2pct-gal.jpg",
+    "price": 3.99,
+    "size": "1 gal",
+    "category": "Dairy",
+    "upc": "071041000018"
+  },
+  {
+    "id": "cm-deans-2pct-gal",
+    "name": "Dean's 2% Reduced Fat Milk",
+    "brand": "Dean's",
+    "imageUrl": "https://shop.countymarket.com/images/deans-2pct-gal.jpg",
+    "price": 4.29,
+    "salePrice": 3.79,
+    "saleEndsOn": "2026-05-12",
+    "size": "1 gal",
+    "category": "Dairy",
+    "upc": "041900070625"
+  },
+  {
+    "id": "cm-borden-2pct-gal",
+    "name": "Borden 2% Reduced Fat Milk",
+    "brand": "Borden",
+    "imageUrl": "https://shop.countymarket.com/images/borden-2pct-gal.jpg",
+    "price": 3.99,
+    "size": "1 gal",
+    "category": "Dairy",
+    "upc": "070852920368"
+  },
+  {
+    "id": "cm-prairie-farms-2pct-half",
+    "name": "Prairie Farms 2% Reduced Fat Milk",
+    "brand": "Prairie Farms",
+    "imageUrl": "https://shop.countymarket.com/images/prairie-farms-2pct-half.jpg",
+    "price": 2.49,
+    "size": "0.5 gal",
+    "category": "Dairy",
+    "upc": "071041000025"
+  }
+]

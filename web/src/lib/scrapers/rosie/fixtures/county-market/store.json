@@ -1,0 +1,14 @@
+{
+  "id": "county-market-springfield-6th",
+  "name": "County Market - South 6th",
+  "address": {
+    "streetAddress": "2777 S 6th St",
+    "addressLocality": "Springfield",
+    "addressRegion": "IL",
+    "postalCode": "62703"
+  },
+  "geo": {
+    "latitude": 39.7560,
+    "longitude": -89.6478
+  }
+}

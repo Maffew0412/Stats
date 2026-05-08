@@ -51,6 +51,12 @@ export interface ScraperContext {
   zip: string;
   /** When true, the scraper does no network I/O and pulls from fixtures. */
   dryRun: boolean;
+  /**
+   * The chain slug being scraped. For 1:1 scrapers (Target, Aldi) this equals
+   * the scraper's own key. For multi-tenant scrapers (Rosie) this drives
+   * tenant selection — Rosie hosts both County Market and Harvest Market.
+   */
+  chainSlug: string;
 }
 
 export interface Scraper {

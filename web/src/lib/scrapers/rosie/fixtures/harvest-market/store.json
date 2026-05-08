@@ -1,0 +1,14 @@
+{
+  "id": "harvest-market-champaign",
+  "name": "Harvest Market",
+  "address": {
+    "streetAddress": "2029 S Neil St",
+    "addressLocality": "Champaign",
+    "addressRegion": "IL",
+    "postalCode": "61820"
+  },
+  "geo": {
+    "latitude": 40.0974,
+    "longitude": -88.2435
+  }
+}
