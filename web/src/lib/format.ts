@@ -10,7 +10,12 @@ export function formatMoney(cents: number): string {
 
 export function formatSize(value: string | null, unit: string | null): string | null {
   if (!value) return null;
-  const v = String(value).replace(/\.0+$/, '');
+  // Strip trailing zeros after a decimal point, then a dangling decimal:
+  //   '1'     -> '1'
+  //   '1.0'   -> '1'
+  //   '1.50'  -> '1.5'
+  //   '1.05'  -> '1.05'  (preserves the meaningful zero)
+  const v = String(value).replace(/(\.\d*?)0+$/, '$1').replace(/\.$/, '');
   return unit ? `${v} ${unit}` : v;
 }
 

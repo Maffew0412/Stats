@@ -28,6 +28,12 @@ import { dirname, join } from 'node:path';
 import { db } from '../src/lib/db';
 import { brandedProducts, departments } from '../src/lib/db/schema';
 import { BRANDED_PRODUCT_SEEDS } from '../src/lib/catalog/branded';
+import {
+  brandSearchTerms,
+  inferDepartmentFromOffTags,
+  normalizeOff,
+  type RawOffResponse,
+} from '../src/lib/off/normalize';
 import { eq, sql } from 'drizzle-orm';
 
 const FIXTURES_DIR = join(dirname(fileURLToPath(import.meta.url)), 'fixtures', 'off');
@@ -40,37 +46,6 @@ interface Args {
   printOnly: boolean;
   fromSeeds: boolean;
 }
-
-interface RawOffResponse {
-  code?: string;
-  status?: number;
-  status_verbose?: string;
-  product?: {
-    code?: string;
-    product_name?: string;
-    product_name_en?: string;
-    brands?: string;
-    brands_tags?: string[];
-    quantity?: string;
-    image_url?: string;
-    image_front_url?: string;
-    categories_tags?: string[];
-    categories?: string;
-  };
-}
-
-interface NormalizedOff {
-  upc: string;
-  name: string;
-  brand: string | null;
-  sizeValue: string | null;
-  sizeUnit: string | null;
-  imageUrl: string | null;
-  /** OFF category labels we'll try to map onto our department slugs. */
-  categoryTags: string[];
-}
-
-const QUANTITY_PATTERN = /(\d+(?:[.,]\d+)?)\s*(g|kg|ml|l|oz|lb|gal|gallon|qt|fl\s*oz|ct|count|pk|pack|each|ea)\b/i;
 
 function parseArgs(argv: string[]): Args {
   const flags = new Map<string, string>();
@@ -110,72 +85,6 @@ async function loadFixture(upc: string): Promise<RawOffResponse> {
   return JSON.parse(raw) as RawOffResponse;
 }
 
-function normalize(raw: RawOffResponse): NormalizedOff | null {
-  if (!raw.status || raw.status === 0) return null;
-  const p = raw.product;
-  if (!p) return null;
-  const upc = p.code ?? raw.code;
-  if (!upc) return null;
-  const name = (p.product_name_en ?? p.product_name ?? '').trim();
-  if (!name) return null;
-
-  const brand = (p.brands?.split(',')[0] ?? '').trim() || null;
-  const { value, unit } = parseQuantity(p.quantity);
-
-  return {
-    upc,
-    name,
-    brand,
-    sizeValue: value,
-    sizeUnit: unit,
-    imageUrl: p.image_front_url ?? p.image_url ?? null,
-    categoryTags: p.categories_tags ?? [],
-  };
-}
-
-function parseQuantity(qty: string | undefined): {
-  value: string | null;
-  unit: string | null;
-} {
-  if (!qty) return { value: null, unit: null };
-  const m = qty.match(QUANTITY_PATTERN);
-  if (!m) return { value: null, unit: null };
-  return { value: m[1].replace(',', '.'), unit: normalizeUnit(m[2]) };
-}
-
-function normalizeUnit(unit: string): string {
-  const u = unit.toLowerCase().replace(/\s+/g, '');
-  if (u === 'gallon') return 'gal';
-  if (u === 'count') return 'ct';
-  if (u === 'pack' || u === 'pk') return 'ct';
-  if (u === 'each' || u === 'ea') return 'ea';
-  if (u === 'floz') return 'fl oz';
-  return u;
-}
-
-/**
- * Map OFF categories_tags to our department slugs. Best-effort; falls
- * back to leaving department_id NULL when we don't recognize anything.
- */
-function inferDepartment(tags: string[]): string | null {
-  for (const tag of tags) {
-    const t = tag.toLowerCase();
-    if (t.includes('dairies') || t.includes('milk') || t.includes('cheese') || t.includes('yogurt') || t.includes('butter')) return 'dairy';
-    if (t.includes('bread') || t.includes('bakery')) return 'bakery';
-    if (t.includes('breakfast') || t.includes('cereals')) return 'breakfast';
-    if (t.includes('beverages') || t.includes('drinks') || t.includes('juices') || t.includes('coffee') || t.includes('teas')) return 'beverages';
-    if (t.includes('frozen')) return 'frozen';
-    if (t.includes('meat') || t.includes('poultry')) return 'meat';
-    if (t.includes('fish') || t.includes('seafood')) return 'seafood';
-    if (t.includes('snack')) return 'snacks';
-    if (t.includes('produce') || t.includes('fruits') || t.includes('vegetables')) return 'produce';
-    if (t.includes('cleaning') || t.includes('detergent')) return 'household';
-    if (t.includes('baby')) return 'baby';
-    if (t.includes('personal-care') || t.includes('hygiene')) return 'personal-care';
-  }
-  return null;
-}
-
 async function main() {
   const args = parseArgs(process.argv.slice(2));
 
@@ -188,7 +97,6 @@ async function main() {
     process.exit(2);
   }
 
-  // Resolve department slugs once.
   let departmentIdBySlug = new Map<string, number>();
   if (!args.printOnly) {
     const rows = await db.select().from(departments);
@@ -205,13 +113,13 @@ async function main() {
   for (const upc of upcs) {
     try {
       const raw = args.dryRun ? await loadFixture(upc) : await fetchOff(upc);
-      const norm = normalize(raw);
+      const norm = normalizeOff(raw);
       if (!norm) {
         console.log(`  ${upc} → not found`);
         missing += 1;
         continue;
       }
-      const departmentSlug = inferDepartment(norm.categoryTags);
+      const departmentSlug = inferDepartmentFromOffTags(norm.categoryTags);
       const departmentId = departmentSlug
         ? departmentIdBySlug.get(departmentSlug) ?? null
         : null;
@@ -262,15 +170,6 @@ async function main() {
   console.log(
     `Done. ${upserted} upserted, ${missing} not found, ${failed} failed.`,
   );
-}
-
-function brandSearchTerms(n: NormalizedOff): string[] {
-  const terms = new Set<string>();
-  if (n.brand) terms.add(n.brand.toLowerCase());
-  for (const word of n.name.toLowerCase().split(/\s+/)) {
-    if (word.length >= 3) terms.add(word);
-  }
-  return Array.from(terms);
 }
 
 function sleep(ms: number): Promise<void> {
