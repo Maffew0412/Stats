@@ -72,6 +72,35 @@ export const genericConcepts = pgTable(
   ],
 );
 
+/**
+ * Canonical branded products. UPC is the natural key and matches
+ * `store_products.upc` for cross-store branded comparison.
+ *
+ * Populated from two sources:
+ *  - Static seed (src/lib/catalog/branded.ts) for an initial curated set
+ *  - Open Food Facts ingestion (scripts/import-off.ts) for refresh / expansion
+ */
+export const brandedProducts = pgTable(
+  'branded_products',
+  {
+    upc: text('upc').primaryKey(),
+    name: text('name').notNull(),
+    brand: text('brand'),
+    sizeValue: numeric('size_value'),
+    sizeUnit: text('size_unit'),
+    departmentId: smallint('department_id').references(() => departments.id),
+    imageUrl: text('image_url'),
+    searchTerms: text('search_terms').array(),
+    /** Where this row's data came from, e.g. 'seed' or 'open-food-facts'. */
+    source: text('source').notNull().default('seed'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('branded_products_search_terms_gin').using('gin', t.searchTerms),
+  ],
+);
+
 export const storeProducts = pgTable(
   'store_products',
   {

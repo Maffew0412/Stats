@@ -8,7 +8,7 @@ import { ListItemRow } from './ListItemRow';
 import { loadList, saveList } from '@/lib/list/storage';
 import { loadPrefs } from '@/lib/prefs/storage';
 import type { ListItem } from '@/lib/list/types';
-import type { GenericConceptSeed } from '@/lib/catalog/seeds';
+import type { SearchResult } from '@/lib/catalog/search';
 
 export function ListBuilder() {
   const router = useRouter();
@@ -31,26 +31,15 @@ export function ListBuilder() {
     if (hydrated) saveList(items);
   }, [items, hydrated]);
 
-  function addConcept(concept: GenericConceptSeed, rawQuery: string) {
+  function addPick(result: SearchResult, rawQuery: string) {
     setItems((prev) => {
-      const existing = prev.find(
-        (it) => it.intent === 'generic' && it.conceptSlug === concept.slug,
-      );
+      const existing = findExisting(prev, result);
       if (existing) {
         return prev.map((it) =>
           it.id === existing.id ? { ...it, quantity: it.quantity + 1 } : it,
         );
       }
-      const next: ListItem = {
-        id: crypto.randomUUID(),
-        intent: 'generic',
-        conceptSlug: concept.slug,
-        rawQuery,
-        displayName: concept.name,
-        quantity: 1,
-        departmentSlug: concept.departmentSlug,
-        createdAt: Date.now(),
-      };
+      const next = buildListItem(result, rawQuery);
       return [...prev, next];
     });
   }
@@ -108,7 +97,7 @@ export function ListBuilder() {
         </Link>
       </header>
 
-      <AddItemInput onPick={addConcept} />
+      <AddItemInput onPick={addPick} />
 
       <section className="flex flex-col gap-2">
         <div className="flex items-center justify-between text-sm text-zinc-600 dark:text-zinc-400">
@@ -162,9 +151,48 @@ function EmptyState() {
       <p className="text-sm text-zinc-600 dark:text-zinc-400">
         Start typing above to add items. Try{' '}
         <span className="font-medium text-zinc-900 dark:text-zinc-100">milk</span>,{' '}
-        <span className="font-medium text-zinc-900 dark:text-zinc-100">eggs</span>, or{' '}
-        <span className="font-medium text-zinc-900 dark:text-zinc-100">bananas</span>.
+        <span className="font-medium text-zinc-900 dark:text-zinc-100">Cheerios</span>, or{' '}
+        <span className="font-medium text-zinc-900 dark:text-zinc-100">Heinz ketchup</span>.
       </p>
     </div>
   );
+}
+
+function findExisting(items: ListItem[], result: SearchResult): ListItem | undefined {
+  if (result.kind === 'generic') {
+    return items.find(
+      (it) => it.intent === 'generic' && it.conceptSlug === result.concept.slug,
+    );
+  }
+  return items.find(
+    (it) => it.intent === 'branded' && it.upc === result.product.upc,
+  );
+}
+
+function buildListItem(result: SearchResult, rawQuery: string): ListItem {
+  const now = Date.now();
+  const id = crypto.randomUUID();
+  if (result.kind === 'generic') {
+    return {
+      id,
+      intent: 'generic',
+      conceptSlug: result.concept.slug,
+      rawQuery,
+      displayName: result.concept.name,
+      quantity: 1,
+      departmentSlug: result.concept.departmentSlug,
+      createdAt: now,
+    };
+  }
+  const product = result.product;
+  return {
+    id,
+    intent: 'branded',
+    upc: product.upc,
+    rawQuery,
+    displayName: `${product.brand} ${product.name}`.trim(),
+    quantity: 1,
+    departmentSlug: product.departmentSlug,
+    createdAt: now,
+  };
 }

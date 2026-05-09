@@ -1,0 +1,17 @@
+{
+  "code": "3017620422003",
+  "status": 1,
+  "status_verbose": "product found",
+  "product": {
+    "code": "3017620422003",
+    "product_name": "Nutella",
+    "product_name_en": "Nutella",
+    "brands": "Ferrero, Nutella",
+    "brands_tags": ["ferrero", "nutella"],
+    "quantity": "400 g",
+    "image_front_url": "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.0.400.jpg",
+    "image_url": "https://images.openfoodfacts.org/images/products/301/762/042/2003/front_en.0.400.jpg",
+    "categories_tags": ["en:breakfasts", "en:spreads", "en:sweet-spreads", "en:hazelnut-spreads"],
+    "categories": "Breakfasts, Spreads, Sweet spreads, Hazelnut spreads"
+  }
+}

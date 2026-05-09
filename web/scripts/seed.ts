@@ -14,12 +14,18 @@
 
 import 'dotenv/config';
 import { db } from '../src/lib/db';
-import { chains, departments, genericConcepts } from '../src/lib/db/schema';
+import {
+  brandedProducts,
+  chains,
+  departments,
+  genericConcepts,
+} from '../src/lib/db/schema';
 import {
   CHAIN_SEEDS,
   DEPARTMENT_SEEDS,
   GENERIC_CONCEPT_SEEDS,
 } from '../src/lib/catalog/seeds';
+import { BRANDED_PRODUCT_SEEDS } from '../src/lib/catalog/branded';
 
 async function main() {
   console.log(`Seeding ${CHAIN_SEEDS.length} chains...`);
@@ -48,6 +54,29 @@ async function main() {
     };
   });
   await db.insert(genericConcepts).values(conceptRows).onConflictDoNothing({ target: genericConcepts.slug });
+
+  console.log(`Seeding ${BRANDED_PRODUCT_SEEDS.length} branded products...`);
+  const brandedRows = BRANDED_PRODUCT_SEEDS.map((bp) => {
+    const departmentId = departmentIdBySlug.get(bp.departmentSlug);
+    if (departmentId === undefined) {
+      throw new Error(`Unknown department slug: ${bp.departmentSlug}`);
+    }
+    return {
+      upc: bp.upc,
+      name: bp.name,
+      brand: bp.brand,
+      sizeValue: bp.sizeValue,
+      sizeUnit: bp.sizeUnit,
+      departmentId,
+      imageUrl: bp.imageUrl,
+      searchTerms: bp.searchTerms,
+      source: 'seed',
+    };
+  });
+  await db
+    .insert(brandedProducts)
+    .values(brandedRows)
+    .onConflictDoNothing({ target: brandedProducts.upc });
 
   console.log('Seed complete.');
 }
