@@ -71,11 +71,14 @@ export function AddItemInput({ onPick }: Props) {
         placeholder="Add to your list — milk, Cheerios, Heinz ketchup…"
         className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-3 text-base shadow-sm outline-none transition focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100/10"
         autoComplete="off"
+        role="combobox"
         aria-autocomplete="list"
         aria-expanded={open && suggestions.length > 0}
+        aria-controls="add-item-suggestions"
       />
       {open && suggestions.length > 0 && (
         <ul
+          id="add-item-suggestions"
           role="listbox"
           className="absolute z-10 mt-1 max-h-72 w-full overflow-auto rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
         >
