@@ -82,6 +82,20 @@ export interface RawSearchItem {
       images?: { primary_image_url?: string };
     };
     primary_brand?: { name?: string };
+    /**
+     * UPC-bearing fields. Target's PLP responses don't always include these
+     * — the GTIN often only surfaces in the PDP (`pdp_client_v1`) detail.
+     * The normalizer checks all known locations defensively. If branded
+     * matching coverage is too sparse, add a per-product PDP enrichment
+     * pass; the orchestrator can be extended with a detail hook for that.
+     *
+     * Field names below are best-effort against observed responses and
+     * MUST be verified against current PLP output before live use.
+     */
+    gtin13?: string;
+    gtin?: string;
+    upc?: string;
+    product_classification?: { gtin?: string };
   };
   price?: {
     current_retail?: number;

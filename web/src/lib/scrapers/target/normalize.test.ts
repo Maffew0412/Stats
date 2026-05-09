@@ -121,4 +121,76 @@ describe('Target normalizeProduct', () => {
       ),
     ).toBeNull();
   });
+
+  it('extracts UPC from gtin13 when present', () => {
+    const out = normalizeProduct(
+      {
+        tcin: '5',
+        item: {
+          product_description: { title: 'Horizon Organic 2% Milk - 1gal' },
+          gtin13: '0742365000287',
+        },
+        price: { current_retail: 6.99 },
+      },
+      opts,
+    )!;
+    expect(out.upc).toBe('0742365000287');
+  });
+
+  it('falls back to gtin when gtin13 is missing', () => {
+    const out = normalizeProduct(
+      {
+        tcin: '6',
+        item: {
+          product_description: { title: 'Lactaid 2% Milk - 96 fl oz' },
+          gtin: '0041383091003',
+        },
+        price: { current_retail: 5.79 },
+      },
+      opts,
+    )!;
+    expect(out.upc).toBe('0041383091003');
+  });
+
+  it('falls back to product_classification.gtin', () => {
+    const out = normalizeProduct(
+      {
+        tcin: '7',
+        item: {
+          product_description: { title: 'Fairlife - 52 fl oz' },
+          product_classification: { gtin: '0811620020114' },
+        },
+        price: { current_retail: 4.49 },
+      },
+      opts,
+    )!;
+    expect(out.upc).toBe('0811620020114');
+  });
+
+  it('omits UPC when no field is present', () => {
+    const out = normalizeProduct(
+      {
+        tcin: '8',
+        item: { product_description: { title: 'Borden 2% Milk - 1gal' } },
+        price: { current_retail: 3.89 },
+      },
+      opts,
+    )!;
+    expect(out.upc).toBeUndefined();
+  });
+
+  it('rejects non-numeric or wrong-length UPC values', () => {
+    const out = normalizeProduct(
+      {
+        tcin: '9',
+        item: {
+          product_description: { title: 'Bogus - 1gal' },
+          gtin13: 'not-a-upc',
+        },
+        price: { current_retail: 1 },
+      },
+      opts,
+    )!;
+    expect(out.upc).toBeUndefined();
+  });
 });

@@ -45,11 +45,13 @@ export function normalizeProduct(
   if (regularCents === null) return null;
 
   const { sizeValue, sizeUnit } = resolveSize(raw, name);
+  const upc = extractUpc(raw);
 
   return {
     storeSku: sku,
     name,
     brand: raw.brand,
+    upc,
     sizeValue,
     sizeUnit,
     departmentSlug: options.departmentSlug,
@@ -59,6 +61,22 @@ export function normalizeProduct(
       regularCents,
     },
   };
+}
+
+/**
+ * Extract a UPC-shaped value from the locations Aldi has been observed to use.
+ * Returns undefined when none are present (the storefront doesn't expose UPCs
+ * for every item; Aldi private-label SKUs in particular often surface only
+ * Aldi's internal SKU, not a GS1 UPC).
+ */
+function extractUpc(raw: RawAldiProduct): string | undefined {
+  const candidates: (string | undefined)[] = [raw.upc, raw.gtin, raw.barcodes?.[0]];
+  for (const c of candidates) {
+    if (typeof c === 'string' && /^\d{12,14}$/.test(c.trim())) {
+      return c.trim();
+    }
+  }
+  return undefined;
 }
 
 function priceCents(dollars: number | undefined): number | null {

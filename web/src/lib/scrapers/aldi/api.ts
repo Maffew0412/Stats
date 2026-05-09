@@ -83,6 +83,15 @@ export interface RawAldiProduct {
   };
   /** Department / aisle string when present (e.g., "Dairy", "Produce"). */
   category?: string;
+  /**
+   * UPC-bearing fields. Aldi's product responses don't expose UPC consistently;
+   * the field name has varied across versions (`gtin`, `upc`, or a `barcodes`
+   * array). Normalizer checks all known locations defensively. The exact
+   * field path needs verification against current responses before live use.
+   */
+  upc?: string;
+  gtin?: string;
+  barcodes?: string[];
 }
 
 interface RawSearchResponse {

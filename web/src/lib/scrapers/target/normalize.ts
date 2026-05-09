@@ -56,11 +56,13 @@ export function normalizeProduct(
     undefined;
 
   const { sizeValue, sizeUnit } = extractSize(title);
+  const upc = extractUpc(raw);
 
   return {
     storeSku: raw.tcin,
     name: title,
     brand,
+    upc,
     sizeValue,
     sizeUnit,
     departmentSlug: options.departmentSlug,
@@ -71,6 +73,26 @@ export function normalizeProduct(
       saleCents: sale ?? undefined,
     },
   };
+}
+
+/**
+ * Picks the first UPC-shaped value from the locations Target's PLP response
+ * has been observed to use. Returns undefined when none are present (very
+ * common in PLP — UPC typically lives in the PDP detail).
+ */
+function extractUpc(raw: RawSearchItem): string | undefined {
+  const candidates = [
+    raw.item?.gtin13,
+    raw.item?.gtin,
+    raw.item?.upc,
+    raw.item?.product_classification?.gtin,
+  ];
+  for (const c of candidates) {
+    if (typeof c === 'string' && /^\d{12,14}$/.test(c.trim())) {
+      return c.trim();
+    }
+  }
+  return undefined;
 }
 
 function priceCents(dollars: number | undefined): number | null {

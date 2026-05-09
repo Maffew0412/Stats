@@ -42,7 +42,8 @@
       "value": "0.5",
       "unit": "gal"
     },
-    "category": "Dairy"
+    "category": "Dairy",
+    "upc": "0041498250362"
   },
   {
     "sku": "4099100208900",
@@ -57,6 +58,7 @@
       "value": "96",
       "unit": "fl oz"
     },
-    "category": "Dairy"
+    "category": "Dairy",
+    "barcodes": ["0041498250379"]
   }
 ]

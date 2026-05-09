@@ -76,4 +76,59 @@ describe('Aldi normalizeProduct', () => {
   it('returns null when no price is present', () => {
     expect(normalizeProduct({ sku: '1', name: 'Milk' }, opts)).toBeNull();
   });
+
+  it('extracts UPC from upc field when present', () => {
+    const out = normalizeProduct(
+      {
+        sku: '1',
+        name: 'Simply Nature Organic 2% Milk',
+        price: { value: 4.39 },
+        upc: '0041498250362',
+      },
+      opts,
+    )!;
+    expect(out.upc).toBe('0041498250362');
+  });
+
+  it('falls back to gtin', () => {
+    const out = normalizeProduct(
+      {
+        sku: '2',
+        name: 'Milk',
+        price: { value: 3 },
+        gtin: '0041498250379',
+      },
+      opts,
+    )!;
+    expect(out.upc).toBe('0041498250379');
+  });
+
+  it('falls back to first entry of barcodes array', () => {
+    const out = normalizeProduct(
+      {
+        sku: '3',
+        name: 'Milk',
+        price: { value: 3 },
+        barcodes: ['0041498250386', '0041498250393'],
+      },
+      opts,
+    )!;
+    expect(out.upc).toBe('0041498250386');
+  });
+
+  it('omits UPC when no field is present', () => {
+    const out = normalizeProduct(
+      { sku: '4', name: 'Milk', price: { value: 3 } },
+      opts,
+    )!;
+    expect(out.upc).toBeUndefined();
+  });
+
+  it('rejects non-numeric or wrong-length UPC values', () => {
+    const out = normalizeProduct(
+      { sku: '5', name: 'Milk', price: { value: 3 }, upc: 'abc' },
+      opts,
+    )!;
+    expect(out.upc).toBeUndefined();
+  });
 });
